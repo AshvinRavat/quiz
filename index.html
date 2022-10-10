@@ -11,60 +11,154 @@
 <body>
      <div class="quiz-container" id="quiz">
          <div class="quiz-header">
-             <h2 id="question">Question Text</h2>
+             <h2 id="question"></h2>
              <ul>
                  <li>
-                     <input type="radio" name="answer" id="a" class="answer">
-                     <label for="a" id="a_text">Answer</label>
+                     <input type="radio" id="for-option1" class="answer" name="options">
+                     <label for="for-option1" id="option1"
+                     onclick="showNextQuestionButtonOnOptionCheck();"></label>
                  </li>
                  <li>
-                     <input type="radio" name="answer" id="b" class="answer">
-                     <label for="b" id="b_text">Answer</label>
+                     <input type="radio" id="for-option2" class="answer" name="options[]">
+                     <label for="for-option2" id="option2" onclick="showNextQuestionButtonOnOptionCheck();"></label>
                  </li>
                  <li>
-                     <input type="radio" name="answer" id="c" class="answer">
-                     <label for="c" id="c_text">Answer</label>
+                     <input type="radio" id="for-option3" class="answer" name="options[]">
+                     <label for="for-option3" id="option3" onclick="showNextQuestionButtonOnOptionCheck();"></label>
                  </li>
                  <li>
-                     <input type="radio" name="answer" id="d" class="answer">
-                     <label for="d" id="d_text">Answer</label>
+                     <input type="radio" id="for-option4" class="answer" name="options[]">
+                     <label for="for-option4" id="option4" onclick="showNextQuestionButtonOnOptionCheck();"></label>
                  </li>
              </ul>
          </div>
+            <button id="next-question" onclick="showNextQuestion();" style="display: none;">Next</button>
+            <button id="last-question" style="display: none;">Submit</button>
      </div>
      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js""></script>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
+
+     <script>
+        var questionsIndex = 0;
+
+        const questionsAndItsOptions = {
+           questions :
+           [
+                 {
+                    question:"Full Form Of Css?",
+                    Option1:"Cascading Style Sheets",
+                    Option2:"Cascading Sheets Style",
+                    Option3:"Cascading Start Style",
+                    Option4:"Cascading Style Start"
+                 },
+                 {
+                    question:"Full Form Of JS?",
+                    Option1:"Java Script",
+                    Option2:"Java Sorting",
+                    Option3:"Java Styles",
+                    Option4:"none of above"
+                 },
+                 {
+                    question:"Full Form Of HTML",
+                    Option1:"Hyper Text Maker Language",
+                    Option2:"HTML Language",
+                    Option3:"Hyper Text Markup Language",
+                    Option4:"none of above"
+                 },
+                 {
+                    question:"Full Form Of PHP",
+                    Option1:"Personal Home Page",
+                    Option2:"PHP Language",
+                    Option3:"Predefine Home Page",
+                    Option4:"none of above"
+                 },
+                 {
+                    question:"Full Form Of AJAX ",
+                    Option1:" Asynchronous JavaScript And XML.",
+                    Option2:"AJAX",
+                    Option3:"Asynchronous JavaScript And Language .",
+                    Option4:"none of above"
+                 },
+           ]
+        }
+        var lastQuestionIndex = Object.keys(questionsAndItsOptions.questions).length;
+
+        function displayQuestions() {
+            document.getElementById('question').innerHTML =
+            questionsAndItsOptions.questions[questionsIndex].question;
+        }
+
+        function checkOptionsAreSelected() {
+            var option1RadioButtonValue = document.getElementById("for-option1");
+            var option2RadioButtonValue = document.getElementById("for-option2");
+            var option3RadioButtonValue = document.getElementById("for-option3");
+            var option4RadioButtonValue = document.getElementById("for-option4");
+
+            if (option1RadioButtonValue.checked) {
+            document.getElementById("for-option1").checked = false;
+            }
+
+            if (option2RadioButtonValue.checked) {
+            document.getElementById("for-option2").checked = false;
+            }
+
+            if (option3RadioButtonValue.checked) {
+            document.getElementById("for-option3").checked = false;
+            }
+
+            if (option4RadioButtonValue.checked) {
+            document.getElementById("for-option4").checked = false;
+            }
+        }
+
+        function displayOptionsOfQuestions() {
+
+            checkOptionsAreSelected();
+
+             document.getElementById('for-option1').value =
+             questionsAndItsOptions.questions[questionsIndex].Option1;
+
+
+             document.getElementById('option1').innerHTML =
+             questionsAndItsOptions.questions[questionsIndex].Option1;
+
+             document.getElementById('option2').innerHTML =
+             questionsAndItsOptions.questions[questionsIndex].Option2;
+
+             document.getElementById('option3').innerHTML =
+             questionsAndItsOptions.questions[questionsIndex].Option3;
+
+             document.getElementById('option4').innerHTML =
+             questionsAndItsOptions.questions[questionsIndex].Option4;
+        }
+
+         function displayQuestionAndOptions() {
+            displayQuestions();
+            displayOptionsOfQuestions();
+         }
+
+        displayQuestionAndOptions();
+
+        function showNextQuestionButtonOnOptionCheck() {
+            questionsIndex++;
+
+            if (questionsIndex === lastQuestionIndex) {
+                document.getElementById("last-question").style = "display : block";
+            }
+            else {
+                document.getElementById("next-question").style = "display : block";
+            }
+        }
+
+        function hideNextQuestionButton() {
+            document.getElementById("next-question").style = "display : none";
+        }
+
+        function showNextQuestion() {
+            hideNextQuestionButton();
+            displayQuestionAndOptions();
+        }
+
+     </script>
 </body>
 </html>
-
-<script>
-    var questionAndItsOrations = {
-       questionOneAndOptions : [
-            {
-                "question1": 'Full Form of Css',
-                "option1": 'Cascading Style Sheets',
-                "option2": 'Cascading Sheets Style ',
-                "option3": 'Coding Sheets Style ',
-                "option4": 'Coding Style Sheets ',
-            }
-       ],
-       questionTwoAndOptions : [
-            {
-                "questionTwo": 'Full Form of js',
-                "optionOne": 'Cascading Style Sheets',
-                "optionTwo": 'Cascading Sheets Style ',
-                "optionThree": 'Coding Sheets Style ',
-                "optionFour": 'Coding Style Sheets ',
-            }
-       ],
-       questionTwoAndOptions : [
-            {
-                "questionOne": 'Full Form of js',
-                "optionOne": 'Cascading Style Sheets',
-                "optionTwo": 'Cascading Sheets Style ',
-                "optionThree": 'Coding Sheets Style ',
-                "optionFour": 'Coding Style Sheets ',
-            }
-       ],
-    };
-</script>
