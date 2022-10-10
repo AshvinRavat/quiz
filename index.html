@@ -27,35 +27,90 @@
      </div>
  </div>
 
+<div class="modal fade" id="result" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Result</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Correct questions :
+                <span id="display-correct-questions"></span>
+            </div>
+            <div class="modal-footer">
+                <a href="http://quiz.local/">
+                    <button type="button" class="btn btn-primary">
+                        Restart The Quiz
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
      <div class="quiz-container" id="quiz">
          <div class="quiz-header">
              <h2 id="question"></h2>
              <ul>
                  <li>
-                     <input type="radio" id="for-option1" class="answer" name="options[]">
+                     <input type="radio" id="for-option1"
+                        class="answer" name="options"
+                    >
                      <label for="for-option1" id="option1"
-                     onclick="showNextQuestionButtonOnOptionCheck();"></label>
+                        onclick="showNextQuestionButtonOnOptionCheck();">
+                    </label>
                  </li>
                  <li>
-                     <input type="radio" id="for-option2" class="answer" name="options[]">
-                     <label for="for-option2" id="option2" onclick="showNextQuestionButtonOnOptionCheck();"></label>
+                     <input type="radio" id="for-option2"
+                        class="answer" name="options"
+                    >
+                     <label for="for-option2" id="option2"
+                        onclick="showNextQuestionButtonOnOptionCheck();">
+                    </label>
                  </li>
                  <li>
-                     <input type="radio" id="for-option3" class="answer" name="options[]">
-                     <label for="for-option3" id="option3" onclick="showNextQuestionButtonOnOptionCheck();"></label>
+                     <input type="radio" id="for-option3"
+                        class="answer" name="options"
+                    >
+                     <label for="for-option3" id="option3"
+                         onclick="showNextQuestionButtonOnOptionCheck();">
+                     </label>
                  </li>
                  <li>
-                     <input type="radio" id="for-option4" class="answer" name="options[]">
-                     <label for="for-option4" id="option4" onclick="showNextQuestionButtonOnOptionCheck();"></label>
+                     <input type="radio" id="for-option4"
+                        class="answer" name="options"
+                     >
+                     <label for="for-option4" id="option4"
+                        onclick="showNextQuestionButtonOnOptionCheck();">
+                    </label>
                  </li>
              </ul>
+             <button id="next-question" onclick="displayRadioValue(),
+                showNextQuestion();" style="display: none;"
+                 class="btn btn-primary">
+                 Next
+            </button>
+
+             <button type="button" id="last-question" style="display: none;"
+                 onclick="displayRadioValue(),displayResult();"
+                 data-bs-toggle="modal" data-bs-target="#result"
+                 class="btn btn-primary">
+                 Submit
+             </button>
          </div>
-            <button id="next-question" onclick="showNextQuestion();" style="display: none;">Next</button>
-            <button id="last-question" style="display: none;">Submit</button>
      </div>
 
      <script>
         var questionsIndex = 0;
+        var userSelectAnswers = [];
+
+        var correctAnswers = [
+            "Cascading Style Sheets",
+             "Java Script",
+            "Hyper Text Maker Language",
+            "Personal Home Page",
+            "Asynchronous JavaScript And XML"
+        ];
 
         const questionsAndItsOptions = {
            questions :
@@ -90,9 +145,9 @@
                  },
                  {
                     question:"Full Form Of AJAX ",
-                    Option1:" Asynchronous JavaScript And XML.",
+                    Option1:"Asynchronous JavaScript And XML",
                     Option2:"AJAX",
-                    Option3:"Asynchronous JavaScript And Language .",
+                    Option3:"Asynchronous JavaScript And Language.",
                     Option4:"none of above"
                  },
            ]
@@ -159,6 +214,7 @@
 
             if (questionsIndex === lastQuestionIndex) {
                 document.getElementById("last-question").style = "display : block";
+
             }
             else {
                 document.getElementById("next-question").style = "display : block";
@@ -175,7 +231,21 @@
 
         }
 
+        function displayRadioValue() {
+            var useSelectedAnswer = document.getElementsByName('options');
 
+            for(i = 0; i < useSelectedAnswer.length; i++) {
+                if(useSelectedAnswer[i].checked) {
+                    if (correctAnswers.includes(useSelectedAnswer[i].value)) {
+                        userSelectAnswers.push(1);
+                    }
+                }
+            }
+        }
+
+        function displayResult() {
+            document.getElementById("display-correct-questions").innerHTML = userSelectAnswers.length + "/5";
+        }
 
      </script>
      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js""></script>
