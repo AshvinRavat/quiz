@@ -9,94 +9,102 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body onload="startTimer(duration, display);">
-
- <div id="myModal" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-     <div class="modal-dialog">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <h1 class="modal-title fs-5" id="exampleModalLabel">Start Quiz</h1>
-                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-             </div>
-             <div class="modal-body">
-                Let's Play The Quiz...
-             </div>
-             <div class="modal-footer">
-                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal"> Let's Start The Quiz...</button>
-             </div>
-         </div>
-     </div>
- </div>
-
-<div class="modal fade" id="result" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Result</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Correct questions :
-                <span id="display-correct-questions"></span>
-            </div>
-            <div class="modal-footer">
-                <a href="http://quiz.local/">
-                    <button type="button" class="btn btn-primary">
-                        Restart The Quiz
-                    </button>
-                </a>
+    <div id="myModal" class="modal fade" id="exampleModal"
+        tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Start Quiz</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Let's Play The Quiz...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"> Let's Start The Quiz...</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade" id="result"
+        tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Result</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Correct questions :
+                    <span id="display-correct-questions"></span>
+                    <p id="time-out"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="http://quiz.local/">
+                        <button type="button" class="btn btn-primary">
+                            Restart The Quiz
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
      <div class="quiz-container" id="quiz">
          <div class="quiz-header">
-                <div>Time Left <span id="time" class="text-left">01:00</span></div>
+            <div>Time Left
+                <span id="time" class="text-left">
+                    01:00
+                </span>
+            </div>
 
              <h2 id="question"></h2>
              <ul>
                  <li>
                      <input type="radio" id="for-option1"
                         class="answer" name="options"
-                    >
+                    onclick="displayNextQuestionButton();">
                      <label for="for-option1" id="option1"
-                        onclick="showNextQuestionButtonOnOptionCheck();">
+                        onclick="displayNextQuestionButton();">
                     </label>
                  </li>
                  <li>
                      <input type="radio" id="for-option2"
                         class="answer" name="options"
-                    >
+                    onclick="displayNextQuestionButton();">
                      <label for="for-option2" id="option2"
-                        onclick="showNextQuestionButtonOnOptionCheck();">
+                        onclick="displayNextQuestionButton();">
                     </label>
                  </li>
                  <li>
                      <input type="radio" id="for-option3"
                         class="answer" name="options"
-                    >
+                    onclick="displayNextQuestionButton();">
                      <label for="for-option3" id="option3"
-                         onclick="showNextQuestionButtonOnOptionCheck();">
+                         onclick="displayNextQuestionButton();">
                      </label>
                  </li>
                  <li>
                      <input type="radio" id="for-option4"
                         class="answer" name="options"
-                     >
+                     onclick="displayNextQuestionButton();">
                      <label for="for-option4" id="option4"
-                        onclick="showNextQuestionButtonOnOptionCheck();">
+                        onclick="displayNextQuestionButton();">
                     </label>
                  </li>
              </ul>
-             <button id="next-question" onclick="displayRadioValue(),
-                showNextQuestion();" style="display: none;"
+             <button id="next-question" onclick="getUserSelectedOptions(),
+                 DisplayNextQuestionOnNextButton();" style="display: none;"
                  class="btn btn-primary">
                  Next
             </button>
 
              <button type="button" id="last-question" style="display: none;"
-                 onclick="displayRadioValue(),displayResult();"
+                 onclick="getUserSelectedOptions(),displayResult();"
                  data-bs-toggle="modal" data-bs-target="#result"
                  class="btn btn-primary">
                  Submit
@@ -213,29 +221,29 @@
 
         displayQuestionAndOptions();
 
-        function showNextQuestionButtonOnOptionCheck() {
-            questionsIndex++;
-
-            if (questionsIndex === lastQuestionIndex) {
+        function displayNextQuestionButton() {
+            if (questionsIndex == 4) {
                 document.getElementById("last-question").style = "display : block";
-
             }
             else {
                 document.getElementById("next-question").style = "display : block";
             }
         }
 
-        function hideNextQuestionButton() {
+        function hideNextQuestionButtonOnNextQuestion() {
             document.getElementById("next-question").style = "display : none";
         }
 
-        function showNextQuestion() {
-            hideNextQuestionButton();
+        function DisplayNextQuestionOnNextButton() {
+            questionsIndex++;
+            if (questionsIndex == 4) {
+                displayNextQuestionButton();
+            }
+            hideNextQuestionButtonOnNextQuestion();
             displayQuestionAndOptions();
-
         }
 
-        function displayRadioValue() {
+        function getUserSelectedOptions() {
             var useSelectedAnswer = document.getElementsByName('options');
 
             for(i = 0; i < useSelectedAnswer.length; i++) {
@@ -257,18 +265,25 @@
             minutes = parseInt(timer / 60, 10);
             seconds = parseInt(timer % 60, 10);
             if (display.innerHTML === "00:00") {
-            alert('Time Out');
+                displayResult();
+                document.getElementById("time-out").innerHTML = "Time Out!";
+                $(document).ready(function () {
+                    $("#result").modal('show');
+            });
         }
-        minutes = minutes < 10 ? "0" + minutes : minutes; seconds=seconds < 10 ? "0" + seconds : seconds;
-            display.textContent=minutes + ":" + seconds;
-            if (--timer < 0) {
-                timer=duration; } }, 1000);
-            }
 
-        window.onload=function () {
+        minutes = minutes < 10 ? "0" + minutes : minutes; seconds=seconds < 10 ? "0" + seconds : seconds;
+        display.textContent=minutes + ":" + seconds;
+        if (--timer < 0) {
+            timer=duration; } }, 1000);
+        }
+
+        window.onload=function ()
+        {
             var oneMinute= 60 * 1, display=document.querySelector('#time');
             startTimer(oneMinute, display);
-            };
+        };
+
      </script>
      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js""></script>
      <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"> </script>
