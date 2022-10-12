@@ -8,34 +8,32 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body onload="startTimer(duration, display);">
-    <div id="myModal" class="modal fade" id="exampleModal"
-        tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+
+<body>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Start Quiz</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     Let's Play The Quiz...
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"> Let's Start The Quiz...</button>
+                    <button type="button" id="start-quiz" class="btn btn-primary" data-bs-dismiss="modal"
+                        onclick="startTimer(duration, display);"> Let's Start The Quiz...</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="result"
-        tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="result" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Result</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     Correct questions :
@@ -44,131 +42,124 @@
                 </div>
 
                 <div class="modal-footer">
-                    <a href="http://quiz.local/">
-                        <button type="button" class="btn btn-primary">
-                            Restart The Quiz
-                        </button>
-                    </a>
+                    <button type="button" class="btn btn-primary" onclick="startTimer(duration, display);">
+                        Restart The Quiz
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-     <div class="quiz-container" id="quiz">
-         <div class="quiz-header">
+    <div class="quiz-container" id="quiz">
+        <div class="quiz-header">
             <div>Time Left
                 <span id="time" class="text-left">
                     01:00
                 </span>
             </div>
 
-             <h2 id="question"></h2>
-             <ul>
-                 <li>
-                     <input type="radio" id="for-option1"
-                        class="answer" name="options"
-                    onclick="displayNextQuestionButton();">
-                     <label for="for-option1" id="option1"
+            <h2 id="question"></h2>
+            <ul>
+                <li>
+                    <input type="radio" id="for-option1" class="answer" name="options"
                         onclick="displayNextQuestionButton();">
+                    <label for="for-option1" id="option1" onclick="displayNextQuestionButton();">
                     </label>
-                 </li>
-                 <li>
-                     <input type="radio" id="for-option2"
-                        class="answer" name="options"
-                    onclick="displayNextQuestionButton();">
-                     <label for="for-option2" id="option2"
+                </li>
+                <li>
+                    <input type="radio" id="for-option2" class="answer" name="options"
                         onclick="displayNextQuestionButton();">
+                    <label for="for-option2" id="option2" onclick="displayNextQuestionButton();">
                     </label>
-                 </li>
-                 <li>
-                     <input type="radio" id="for-option3"
-                        class="answer" name="options"
-                    onclick="displayNextQuestionButton();">
-                     <label for="for-option3" id="option3"
-                         onclick="displayNextQuestionButton();">
-                     </label>
-                 </li>
-                 <li>
-                     <input type="radio" id="for-option4"
-                        class="answer" name="options"
-                     onclick="displayNextQuestionButton();">
-                     <label for="for-option4" id="option4"
+                </li>
+                <li>
+                    <input type="radio" id="for-option3" class="answer" name="options"
                         onclick="displayNextQuestionButton();">
+                    <label for="for-option3" id="option3" onclick="displayNextQuestionButton();">
                     </label>
-                 </li>
-             </ul>
-             <button id="next-question" onclick="getUserSelectedOptions(),
-                 DisplayNextQuestionOnNextButton();" style="display: none;"
-                 class="btn btn-primary">
-                 Next
+                </li>
+                <li>
+                    <input type="radio" id="for-option4" class="answer" name="options"
+                        onclick="displayNextQuestionButton();">
+                    <label for="for-option4" id="option4" onclick="displayNextQuestionButton();">
+                    </label>
+                </li>
+            </ul>
+            <button id="next-question" onclick="getUserSelectedOptions(),
+                 displayNextQuestionOnNextButton();" style="display: none;" class="btn btn-primary">
+                Next
             </button>
 
-             <button type="button" id="last-question" style="display: none;"
-                 onclick="getUserSelectedOptions(),displayResult();"
-                 data-bs-toggle="modal" data-bs-target="#result"
-                 class="btn btn-primary">
-                 Submit
-             </button>
-         </div>
-     </div>
+            <button type="button" id="previous-question" style="display: none;" class="btn btn-primary" onclick="getUserSelectedOptions(); goToPreviousQuestions();
+                 ">
+                Previous-Question
+            </button>
 
-     <script>
+            <button type="button" id="last-question" style="display: none;"
+                onclick="getUserSelectedOptions(),displayResult();" data-bs-toggle="modal" data-bs-target="#result"
+                class="btn btn-primary">
+                Submit
+            </button>
+        </div>
+    </div>
+
+    <script>
         var questionsIndex = 0;
-        var userSelectAnswers = [];
+        var userSelectedOptions = [];
+        var userCorrectAnswers = 0;
 
         var correctAnswers = [
             "Cascading Style Sheets",
-             "Java Script",
+            "Java Script",
             "Hyper Text Maker Language",
             "Personal Home Page",
             "Asynchronous JavaScript And XML"
         ];
 
         const questionsAndItsOptions = {
-           questions :
-           [
-                 {
-                    question:"Full Form Of Css?",
-                    Option1:"Cascading Style Sheets",
-                    Option2:"Cascading Sheets Style",
-                    Option3:"Cascading Start Style",
-                    Option4:"Cascading Style Start"
-                 },
-                 {
-                    question:"Full Form Of JS?",
-                    Option1:"Java Script",
-                    Option2:"Java Sorting",
-                    Option3:"Java Styles",
-                    Option4:"none of above"
-                 },
-                 {
-                    question:"Full Form Of HTML",
-                    Option1:"Hyper Text Maker Language",
-                    Option2:"HTML Language",
-                    Option3:"Hyper Text Markup Language",
-                    Option4:"none of above"
-                 },
-                 {
-                    question:"Full Form Of PHP",
-                    Option1:"Personal Home Page",
-                    Option2:"PHP Language",
-                    Option3:"Predefine Home Page",
-                    Option4:"none of above"
-                 },
-                 {
-                    question:"Full Form Of AJAX ",
-                    Option1:"Asynchronous JavaScript And XML",
-                    Option2:"AJAX",
-                    Option3:"Asynchronous JavaScript And Language.",
-                    Option4:"none of above"
-                 },
-           ]
+            questions: [{
+                    question: "Full Form Of Css?",
+                    Option1: "Cascading Style Sheets",
+                    Option2: "Cascading Sheets Style",
+                    Option3: "Cascading Start Style",
+                    Option4: "Cascading Style Start"
+                },
+                {
+                    question: "Full Form Of JS?",
+                    Option1: "Java Script",
+                    Option2: "Java Sorting",
+                    Option3: "Java Styles",
+                    Option4: "none of above"
+                },
+                {
+                    question: "Full Form Of HTML",
+                    Option1: "Hyper Text Maker Language",
+                    Option2: "HTML Language",
+                    Option3: "Hyper Text Markup Language",
+                    Option4: "none of above"
+                },
+                {
+                    question: "Full Form Of PHP",
+                    Option1: "Personal Home Page",
+                    Option2: "PHP Language",
+                    Option3: "Predefine Home Page",
+                    Option4: "none of above"
+                },
+                {
+                    question: "Full Form Of AJAX ",
+                    Option1: "Asynchronous JavaScript And XML",
+                    Option2: "AJAX",
+                    Option3: "Asynchronous JavaScript And Language.",
+                    Option4: "none of above"
+                },
+            ]
         }
+
         var lastQuestionIndex = Object.keys(questionsAndItsOptions.questions).length;
 
         function displayQuestions() {
             document.getElementById('question').innerHTML =
-            questionsAndItsOptions.questions[questionsIndex].question;
+                questionsAndItsOptions.questions[questionsIndex].question;
         }
 
         function checkOptionsAreSelected() {
@@ -177,120 +168,179 @@
             var option3RadioButtonValue = document.getElementById("for-option3");
             var option4RadioButtonValue = document.getElementById("for-option4");
 
+            if (questionsIndex != 4) {
+                document.getElementById("last-question").style = "display: none";
+            }
+
             if (option1RadioButtonValue.checked) {
-            document.getElementById("for-option1").checked = false;
+                document.getElementById("for-option1").checked = false;
+            }
+
+            if (userSelectedOptions.includes(questionsAndItsOptions.questions[questionsIndex].Option1)) {
+                document.getElementById("for-option1").checked = true;
+                document.getElementById("next-question").style = "display: block";
             }
 
             if (option2RadioButtonValue.checked) {
-            document.getElementById("for-option2").checked = false;
+                document.getElementById("for-option2").checked = false;
+            }
+
+            if (userSelectedOptions.includes(questionsAndItsOptions.questions[questionsIndex].Option2)) {
+                document.getElementById("for-option2").checked = true;
+                document.getElementById("next-question").style = "display: block";
             }
 
             if (option3RadioButtonValue.checked) {
-            document.getElementById("for-option3").checked = false;
+                document.getElementById("for-option3").checked = false;
+            }
+            if (userSelectedOptions.includes(questionsAndItsOptions.questions[questionsIndex].Option3)) {
+                document.getElementById("for-option3").checked = true;
+                document.getElementById("next-question").style = "display: block";
             }
 
             if (option4RadioButtonValue.checked) {
-            document.getElementById("for-option4").checked = false;
+                document.getElementById("for-option4").checked = false;
             }
+
+            if (userSelectedOptions.includes(questionsAndItsOptions.questions[questionsIndex].Option4)) {
+                document.getElementById("for-option4").checked = true;
+                document.getElementById("next-question").style = "display: block";
+            }
+
+            if (questionsIndex > 3) {
+                document.getElementById("next-question").style = "display: none";
+            }
+
         }
 
         function displayOptionsOfQuestions() {
 
             checkOptionsAreSelected();
 
-             document.getElementById('for-option1').value =
-             questionsAndItsOptions.questions[questionsIndex].Option1;
+            document.getElementById('for-option1').value =
+                questionsAndItsOptions.questions[questionsIndex].Option1;
 
-             document.getElementById('option1').innerHTML =
-             questionsAndItsOptions.questions[questionsIndex].Option1;
+            document.getElementById('for-option2').value =
+                questionsAndItsOptions.questions[questionsIndex].Option2;
 
-             document.getElementById('option2').innerHTML =
-             questionsAndItsOptions.questions[questionsIndex].Option2;
+            document.getElementById('for-option3').value =
+                questionsAndItsOptions.questions[questionsIndex].Option3;
 
-             document.getElementById('option3').innerHTML =
-             questionsAndItsOptions.questions[questionsIndex].Option3;
+            document.getElementById('for-option4').value =
+                questionsAndItsOptions.questions[questionsIndex].Option4;
 
-             document.getElementById('option4').innerHTML =
-             questionsAndItsOptions.questions[questionsIndex].Option4;
+            document.getElementById('option1').innerHTML =
+                questionsAndItsOptions.questions[questionsIndex].Option1;
+
+            document.getElementById('option2').innerHTML =
+                questionsAndItsOptions.questions[questionsIndex].Option2;
+
+            document.getElementById('option3').innerHTML =
+                questionsAndItsOptions.questions[questionsIndex].Option3;
+
+            document.getElementById('option4').innerHTML =
+                questionsAndItsOptions.questions[questionsIndex].Option4;
+
         }
 
-         function displayQuestionAndOptions() {
+        function displayQuestionAndOptions() {
             displayQuestions();
             displayOptionsOfQuestions();
-         }
+        }
 
         displayQuestionAndOptions();
 
         function displayNextQuestionButton() {
-            if (questionsIndex == 4) {
+            if (questionsIndex >= 1) {
+                document.getElementById("previous-question").style = "display : block";
+            }
+            document.getElementById("next-question").style = "display : block";
+
+            if (questionsIndex > 3) {
                 document.getElementById("last-question").style = "display : block";
+                document.getElementById("next-question").style = "display: none";
             }
-            else {
-                document.getElementById("next-question").style = "display : block";
-            }
+
         }
 
         function hideNextQuestionButtonOnNextQuestion() {
             document.getElementById("next-question").style = "display : none";
         }
 
-        function DisplayNextQuestionOnNextButton() {
+        function displayNextQuestionOnNextButton() {
             questionsIndex++;
-            if (questionsIndex == 4) {
-                displayNextQuestionButton();
-            }
+            displayNextQuestionButton();
             hideNextQuestionButtonOnNextQuestion();
             displayQuestionAndOptions();
         }
 
-        function getUserSelectedOptions() {
-            var useSelectedAnswer = document.getElementsByName('options');
+        function goToPreviousQuestions() {
+            questionsIndex--;
 
-            for(i = 0; i < useSelectedAnswer.length; i++) {
-                if(useSelectedAnswer[i].checked) {
-                    if (correctAnswers.includes(useSelectedAnswer[i].value)) {
-                        userSelectAnswers.push(1);
+            if (questionsIndex == 0) {
+                document.getElementById("previous-question").style = "display : none";
+            }
+            displayQuestionAndOptions();
+        }
+
+        function getUserSelectedOptions() {
+            var userSelectedOption = document.getElementsByName('options');
+            for (var userSelectedOption of userSelectedOption) {
+                if (userSelectedOption.checked) {
+                    if (userSelectedOptions.includes(userSelectedOption.value)) {
+                        userCorrectAnswers--;
                     }
+                    if (correctAnswers.includes(userSelectedOption.value)) {
+                        userCorrectAnswers++;
+                    }
+                    userSelectedOptions[questionsIndex] = userSelectedOption.value
                 }
             }
         }
 
         function displayResult() {
-            document.getElementById("display-correct-questions").innerHTML = userSelectAnswers.length + "/5";
+            document.getElementById("display-correct-questions").innerHTML = userCorrectAnswers + "/5";
         }
 
         function startTimer(duration, display) {
-            var timer = duration, minutes, seconds;
-            setInterval(function () {
-            minutes = parseInt(timer / 60, 10);
-            seconds = parseInt(timer % 60, 10);
-            if (display.innerHTML === "00:00") {
-                displayResult();
-                document.getElementById("time-out").innerHTML = "Time Out!";
-                $(document).ready(function () {
-                    $("#result").modal('show');
-            });
+            var timer = duration,
+                minutes, seconds;
+            var set = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                if (display.innerHTML === "00:00") {
+                    displayResult();
+
+                    document.getElementById("time-out").innerHTML = "Time Out!";
+                    $(document).ready(function () {
+                        $("#result").modal('show');
+                    });
+
+                    clearTimeout(set);
+                }
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                display.textContent = minutes + ":" + seconds;
+                if (--timer < 0) {
+                    timer = duration;
+                }
+            }, 1000);
         }
 
-        minutes = minutes < 10 ? "0" + minutes : minutes; seconds=seconds < 10 ? "0" + seconds : seconds;
-        display.textContent=minutes + ":" + seconds;
-        if (--timer < 0) {
-            timer=duration; } }, 1000);
-        }
-
-        window.onload=function ()
-        {
-            var oneMinute= 60 * 1, display=document.querySelector('#time');
+        document.getElementById("start-quiz").onclick = function () {
+            var oneMinute = 60 * 1,
+                display = document.querySelector('#time');
             startTimer(oneMinute, display);
         };
-
-     </script>
-     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js""></script>
-     <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"> </script>
-     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js""></script>
+     <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"> </script> <script
+        src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function () {
-            $("#myModal").modal('show');
+            $("#staticBackdrop").modal('show')
         });
     </script>
 </body>
